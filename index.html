@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Surat Pernyataan Nikah Agama</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Times New Roman', Times, serif; }
+        body { background-color: #f0f2f5; margin: 0; padding: 20px; }
+        
+        /* Area Form Input */
+        .form-container {
+            max-width: 900px;
+            margin: 0 auto 30px auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-family: Arial, sans-serif;
+        }
+        .form-container h2 { text-align: center; color: #333; font-family: Arial, sans-serif; margin-top: 0; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .form-section { border: 1px solid #ddd; padding: 15px; border-radius: 5px; margin-bottom: 15px; background: #fafafa; }
+        .form-section h3 { margin-top: 0; color: #2c3e50; font-family: Arial, sans-serif; font-size: 16px; border-bottom: 2px solid #2c3e50; padding-bottom: 5px; }
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-size: 12px; font-weight: bold; margin-bottom: 3px; font-family: Arial, sans-serif; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 13px; font-family: Arial, sans-serif; }
+        
+        .btn-print {
+            display: block;
+            width: 100%;
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+        }
+        .btn-print:hover { background: #219150; }
+
+        /* Area Dokumen Cetak */
+        .page {
+            width: 210mm; /* Ukuran A4 */
+            min-height: 297mm;
+            padding: 15mm 15mm;
+            margin: 0 auto 20px auto;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-size: 11pt; /* Sedikit diperkecil agar lebih padat */
+            line-height: 1.25;
+            position: relative;
+        }
+
+        .text-center { text-align: center; }
+        .text-bold { font-weight: bold; }
+        .title { text-decoration: underline; font-size: 13pt; font-weight: bold; margin-bottom: 10px; }
+
+        p.text-statement { margin: 6px 0; }
+
+        table.data-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; }
+        table.data-table td { vertical-align: top; padding: 1px 0; }
+        
+        .photo-box {
+            border: 1px dashed #666;
+            width: 2.8cm;
+            height: 3.8cm;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9pt;
+            color: #555;
+            margin: 2px;
+        }
+
+        table.ttd-table { width: 100%; margin-top: 25px; border-collapse: collapse; text-align: center; }
+        table.ttd-table td { vertical-align: top; height: 75px; }
+
+        /* CSS pemisah halaman saat Print */
+        @media print {
+            body { background: none; padding: 0; }
+            .form-container { display: none; }
+            .page { 
+                box-shadow: none; 
+                margin: 0; 
+                width: 100%; 
+                padding: 10mm 15mm; 
+                page-break-after: always;
+            }
+            .page:last-child {
+                page-break-after: avoid;
+            }
+            @page { size: A4; margin: 1cm; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- FORM INPUT DATA -->
+<div class="form-container">
+    <h2>Input Data Surat Pernyataan Nikah Agama</h2>
+    <form id="nikahForm">
+        <div class="grid-2">
+            <!-- Data Pria -->
+            <div class="form-section">
+                <h3>Data Mempelai Pria</h3>
+                <div class="form-group"><label>Nama Pria:</label><input type="text" id="in_pria_nama" value="RHANDY RAMOLA" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Bin:</label><input type="text" id="in_pria_bin" value="SOPIAN" oninput="updatePreview()"></div>
+                <div class="form-group"><label>TTL:</label><input type="text" id="in_pria_ttl" value="Anjungan, 27 Juli 1989" oninput="updatePreview()"></div>
+                <div class="form-group"><label>NIK:</label><input type="text" id="in_pria_nik" value="6104162707890004" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Agama:</label><input type="text" id="in_pria_agama" value="Islam" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Pekerjaan:</label><input type="text" id="in_pria_pekerjaan" value="Kepolisian RI (POLRI)" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Alamat:</label><textarea id="in_pria_alamat" rows="2" oninput="updatePreview()">Jl. Cempaka Gg. Melati RT.006 RW.002 Kel. Mulia Kerta Kec. Benua Kayong Kab. Ketapang</textarea></div>
+            </div>
+
+            <!-- Data Wanita -->
+            <div class="form-section">
+                <h3>Data Mempelai Wanita</h3>
+                <div class="form-group"><label>Nama Wanita:</label><input type="text" id="in_wanita_nama" value="NURYANTI" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Binti:</label><input type="text" id="in_wanita_binti" value="SURYADI" oninput="updatePreview()"></div>
+                <div class="form-group"><label>TTL:</label><input type="text" id="in_wanita_ttl" value="Garut, 15 Mei 2000" oninput="updatePreview()"></div>
+                <div class="form-group"><label>NIK:</label><input type="text" id="in_wanita_nik" value="3205155705000002" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Agama:</label><input type="text" id="in_wanita_agama" value="Islam" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Pekerjaan:</label><input type="text" id="in_wanita_pekerjaan" value="Mengurus Rumah Tangga" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Alamat:</label><textarea id="in_wanita_alamat" rows="2" oninput="updatePreview()">KP Cikancung RT.002 RW.004 Kel. Mekar Hurip Kec. Sukawening Kab. Garut</textarea></div>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- Data Pernikahan & Wali -->
+            <div class="form-section">
+                <h3>Detail Pernikahan & Wali</h3>
+                <div class="form-group"><label>Mas Kawin / Mahar:</label><input type="text" id="in_mas_kawin" value="Satu Bingkai Cincin Emas dibayar tunai" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Hari / Tanggal / Thn (Teks):</label><input type="text" id="in_tgl_teks" value="Hari Senin Tanggal Tiga Belas Bulan Juli Tahun Dua Ribu Dua Puluh Enam" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Format Tanggal (Angka):</label><input type="text" id="in_tgl_angka" value="13 – 07 – 2026" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Nama Wali Nikah:</label><input type="text" id="in_wali_nama" value="RAHARDI ARIANTO" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Status Wali (Wali Nasab/Wali Nikah):</label><input type="text" id="in_wali_status" value="Wali Nikah" oninput="updatePreview()"></div>
+            </div>
+
+            <!-- Data Saksi I & II -->
+            <div class="form-section">
+                <h3>Data Saksi I & II</h3>
+                <div class="form-group"><label>Nama Saksi I:</label><input type="text" id="in_saksi1_nama" value="RAHIMIN" oninput="updatePreview()"></div>
+                <div class="form-group"><label>TTL Saksi I:</label><input type="text" id="in_saksi1_ttl" value="Sukaramai, 16 Desember 1992" oninput="updatePreview()"></div>
+                <div class="form-group"><label>NIK Saksi I:</label><input type="text" id="in_saksi1_nik" value="6104031612920006" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Agama Saksi I:</label><input type="text" id="in_saksi1_agama" value="Islam" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Pekerjaan Saksi I:</label><input type="text" id="in_saksi1_pekerjaan" value="Belum/Tidak Bekerja" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Alamat Saksi I:</label><input type="text" id="in_saksi1_alamat" value="Dsn Sukaramai RT.003 RW.002 Desa Sukaramai Kec. Manismata Kab. Ketapang" oninput="updatePreview()"></div>
+                <hr>
+                <div class="form-group"><label>Nama Saksi II:</label><input type="text" id="in_saksi2_nama" value="SATIMAN" oninput="updatePreview()"></div>
+                <div class="form-group"><label>TTL Saksi II:</label><input type="text" id="in_saksi2_ttl" value="Kuala Jelai, 01 Juli 1963" oninput="updatePreview()"></div>
+                <div class="form-group"><label>NIK Saksi II:</label><input type="text" id="in_saksi2_nik" value="6208010107630004" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Agama Saksi II:</label><input type="text" id="in_saksi2_agama" value="Islam" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Pekerjaan Saksi II:</label><input type="text" id="in_saksi2_pekerjaan" value="Petani/Pekebun" oninput="updatePreview()"></div>
+                <div class="form-group"><label>Alamat Saksi II:</label><input type="text" id="in_saksi2_alamat" value="Jl. Pelita RT. 013 RW.004 Kel. Padang Kec. Sukamara Kab. Sukamara" oninput="updatePreview()"></div>
+            </div>
+        </div>
+
+        <button type="button" class="btn-print" onclick="window.print()">Cetak / Simpan PDF (2 Lembar)</button>
+    </form>
+</div>
+
+<!-- TAMPILAN LEMBAR 1 -->
+<div class="page">
+    <div class="text-center">
+        <div class="title">SURAT PERNYATAAN NIKAH AGAMA</div>
+    </div>
+
+    <p class="text-statement">Saya yang bertanda tangan di bawah ini :</p>
+    <table class="data-table">
+        <tr><td width="25%">Nama</td><td width="3%">:</td><td id="out_pria_nama" class="text-bold"></td></tr>
+        <tr><td>Bin</td><td>:</td><td id="out_pria_bin"></td></tr>
+        <tr><td>Tempat Tanggal Lahir</td><td>:</td><td id="out_pria_ttl"></td></tr>
+        <tr><td>NIK</td><td>:</td><td id="out_pria_nik"></td></tr>
+        <tr><td>Agama</td><td>:</td><td id="out_pria_agama"></td></tr>
+        <tr><td>Pekerjaan</td><td>:</td><td id="out_pria_pekerjaan"></td></tr>
+        <tr><td>Alamat</td><td>:</td><td id="out_pria_alamat"></td></tr>
+    </table>
+
+    <p class="text-statement">Maka dengan ini menyatakan bahwa sebenar - benarnya :</p>
+    <table class="data-table">
+        <tr><td width="25%">Nama</td><td width="3%">:</td><td id="out_wanita_nama" class="text-bold"></td></tr>
+        <tr><td>Binti</td><td>:</td><td id="out_wanita_binti"></td></tr>
+        <tr><td>Tempat Tanggal Lahir</td><td>:</td><td id="out_wanita_ttl"></td></tr>
+        <tr><td>NIK</td><td>:</td><td id="out_wanita_nik"></td></tr>
+        <tr><td>Agama</td><td>:</td><td id="out_wanita_agama"></td></tr>
+        <tr><td>Pekerjaan</td><td>:</td><td id="out_wanita_pekerjaan"></td></tr>
+        <tr><td>Alamat</td><td>:</td><td id="out_wanita_alamat"></td></tr>
+    </table>
+
+    <p class="text-statement" style="text-align: justify;">
+        Adalah benar istri sah saya yang telah saya nikahi secara sah menurut hukum agama serta syari’ah islam dengan mas Kawin <span id="out_mas_kawin"></span> pada <span id="out_tgl_teks"></span> ( <span id="out_tgl_angka"></span> ) dalam keadaan sadar serta tanpa ada paksaan dari pihak manapun.
+    </p>
+
+    <p class="text-statement" style="text-align: justify;">
+        Demikian surat ini saya buat dengan sebenar-benarnya dan dapat di pergunakan sebagaimana mestinya, dan apabila dikemudian hari terjadi hal-hal yang tidak di inginkan maka saya bersedia di proses secara hukum menurut undang-undang yang berlaku serta tidak melibatkan pihak manapun.
+    </p>
+
+    <!-- TANDA TANGAN LEMBAR 1 -->
+    <table class="ttd-table">
+        <tr>
+            <td width="33%">
+                Mempelai Pria<br><br><br><br>
+                <span id="out_ttd_pria" class="text-bold"></span>
+            </td>
+            <td width="34%">
+                <div class="photo-box">Foto 3x4</div>
+                <div class="photo-box">Foto 3x4</div>
+            </td>
+            <td width="33%">
+                <span id="out_ttd_wali_status">Wali Nikah</span><br><br><br><br>
+                <span id="out_ttd_wali" class="text-bold"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Mempelai Wanita<br><br><br><br>
+                <span id="out_ttd_wanita" class="text-bold"></span>
+            </td>
+            <td></td>
+            <td>
+                Saksi – saksi<br><br>
+                1. <span id="out_ttd_saksi1_singkat"></span> (...........)<br><br><br><br>
+                2. <span id="out_ttd_saksi2_singkat"></span> (...........)
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- TAMPILAN LEMBAR 2 -->
+<div class="page">
+    <div class="text-center" style="margin-bottom: 40px;">
+        <div class="title">SAKSI DALAM PERNIKAHAN KEDUA MEMPELAI</div>
+    </div>
+
+    <table width="100%" style="border-collapse: collapse;">
+        <tr>
+            <!-- SAKSI I -->
+            <td width="48%" style="vertical-align: top;">
+                <div class="text-bold" style="margin-bottom: 8px; border-bottom: 1px solid #000; padding-bottom: 3px;">SAKSI I</div>
+                <table class="data-table">
+                    <tr><td width="30%">Nama</td><td width="5%">:</td><td id="out_saksi1_nama" class="text-bold"></td></tr>
+                    <tr><td>TTL</td><td>:</td><td id="out_saksi1_ttl"></td></tr>
+                    <tr><td>NIK</td><td>:</td><td id="out_saksi1_nik"></td></tr>
+                    <tr><td>Agama</td><td>:</td><td id="out_saksi1_agama"></td></tr>
+                    <tr><td>Pekerjaan</td><td>:</td><td id="out_saksi1_pekerjaan"></td></tr>
+                    <tr><td>Alamat</td><td>:</td><td id="out_saksi1_alamat"></td></tr>
+                </table>
+            </td>
+            
+            <td width="4%"></td>
+
+            <!-- SAKSI II -->
+            <td width="48%" style="vertical-align: top;">
+                <div class="text-bold" style="margin-bottom: 8px; border-bottom: 1px solid #000; padding-bottom: 2px;">SAKSI II</div>
+                <table class="data-table">
+                    <tr><td width="30%">Nama</td><td width="5%">:</td><td id="out_saksi2_nama" class="text-bold"></td></tr>
+                    <tr><td>TTL</td><td>:</td><td id="out_saksi2_ttl"></td></tr>
+                    <tr><td>NIK</td><td>:</td><td id="out_saksi2_nik"></td></tr>
+                    <tr><td>Agama</td><td>:</td><td id="out_saksi2_agama"></td></tr>
+                    <tr><td>Pekerjaan</td><td>:</td><td id="out_saksi2_pekerjaan"></td></tr>
+                    <tr><td>Alamat</td><td>:</td><td id="out_saksi2_alamat"></td></tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <br><br>
+
+    <!-- TANDA TANGAN LEMBAR 2 -->
+    <table class="ttd-table">
+        <tr>
+            <td width="50%">
+                Mempelai Pria<br><br><br><br>
+                <span id="out_ttd2_pria" class="text-bold"></span>
+            </td>
+            <td width="50%">
+                <span id="out_ttd2_wali_status">Wali Nikah</span><br><br><br><br><br><br>
+                <span id="out_ttd2_wali" class="text-bold"></span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Mempelai Wanita<br><br><br><br>
+                <span id="out_ttd2_wanita" class="text-bold"></span>
+            </td>
+            <td>
+                Saksi-saksi Kedua mempelai :<br><br>
+                <span id="out_ttd2_saksi1" class="text-bold"></span> (....................)<br><br><br><br>
+                <span id="out_ttd2_saksi2" class="text-bold"></span> (....................)
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script>
+    function updatePreview() {
+        // Pria
+        document.getElementById('out_pria_nama').innerText = document.getElementById('in_pria_nama').value;
+        document.getElementById('out_pria_bin').innerText = document.getElementById('in_pria_bin').value;
+        document.getElementById('out_pria_ttl').innerText = document.getElementById('in_pria_ttl').value;
+        document.getElementById('out_pria_nik').innerText = document.getElementById('in_pria_nik').value;
+        document.getElementById('out_pria_agama').innerText = document.getElementById('in_pria_agama').value;
+        document.getElementById('out_pria_pekerjaan').innerText = document.getElementById('in_pria_pekerjaan').value;
+        document.getElementById('out_pria_alamat').innerText = document.getElementById('in_pria_alamat').value;
+        document.getElementById('out_ttd_pria').innerText = document.getElementById('in_pria_nama').value;
+        document.getElementById('out_ttd2_pria').innerText = document.getElementById('in_pria_nama').value;
+
+        // Wanita
+        document.getElementById('out_wanita_nama').innerText = document.getElementById('in_wanita_nama').value;
+        document.getElementById('out_wanita_binti').innerText = document.getElementById('in_wanita_binti').value;
+        document.getElementById('out_wanita_ttl').innerText = document.getElementById('in_wanita_ttl').value;
+        document.getElementById('out_wanita_nik').innerText = document.getElementById('in_wanita_nik').value;
+        document.getElementById('out_wanita_agama').innerText = document.getElementById('in_wanita_agama').value;
+        document.getElementById('out_wanita_pekerjaan').innerText = document.getElementById('in_wanita_pekerjaan').value;
+        document.getElementById('out_wanita_alamat').innerText = document.getElementById('in_wanita_alamat').value;
+        document.getElementById('out_ttd_wanita').innerText = document.getElementById('in_wanita_nama').value;
+        document.getElementById('out_ttd2_wanita').innerText = document.getElementById('in_wanita_nama').value;
+
+        // Detail & Wali
+        document.getElementById('out_mas_kawin').innerText = document.getElementById('in_mas_kawin').value;
+        document.getElementById('out_tgl_teks').innerText = document.getElementById('in_tgl_teks').value;
+        document.getElementById('out_tgl_angka').innerText = document.getElementById('in_tgl_angka').value;
+        document.getElementById('out_ttd_wali').innerText = document.getElementById('in_wali_nama').value;
+        document.getElementById('out_ttd_wali_status').innerText = document.getElementById('in_wali_status').value;
+        document.getElementById('out_ttd2_wali').innerText = document.getElementById('in_wali_nama').value;
+        document.getElementById('out_ttd2_wali_status').innerText = document.getElementById('in_wali_status').value;
+
+        // Saksi I
+        document.getElementById('out_saksi1_nama').innerText = document.getElementById('in_saksi1_nama').value;
+        document.getElementById('out_saksi1_ttl').innerText = document.getElementById('in_saksi1_ttl').value;
+        document.getElementById('out_saksi1_nik').innerText = document.getElementById('in_saksi1_nik').value;
+        document.getElementById('out_saksi1_agama').innerText = document.getElementById('in_saksi1_agama').value;
+        document.getElementById('out_saksi1_pekerjaan').innerText = document.getElementById('in_saksi1_pekerjaan').value;
+        document.getElementById('out_saksi1_alamat').innerText = document.getElementById('in_saksi1_alamat').value;
+        document.getElementById('out_ttd_saksi1_singkat').innerText = document.getElementById('in_saksi1_nama').value;
+        document.getElementById('out_ttd2_saksi1').innerText = document.getElementById('in_saksi1_nama').value;
+
+        // Saksi II
+        document.getElementById('out_saksi2_nama').innerText = document.getElementById('in_saksi2_nama').value;
+        document.getElementById('out_saksi2_ttl').innerText = document.getElementById('in_saksi2_ttl').value;
+        document.getElementById('out_saksi2_nik').innerText = document.getElementById('in_saksi2_nik').value;
+        document.getElementById('out_saksi2_agama').innerText = document.getElementById('in_saksi2_agama').value;
+        document.getElementById('out_saksi2_pekerjaan').innerText = document.getElementById('in_saksi2_pekerjaan').value;
+        document.getElementById('out_saksi2_alamat').innerText = document.getElementById('in_saksi2_alamat').value;
+        document.getElementById('out_ttd_saksi2_singkat').innerText = document.getElementById('in_saksi2_nama').value;
+        document.getElementById('out_ttd2_saksi2').innerText = document.getElementById('in_saksi2_nama').value;
+    }
+
+    // Jalankan fungsi update saat pertama kali dimuat
+    updatePreview();
+</script>
+
+</body>
+</html>
